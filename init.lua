@@ -141,6 +141,12 @@ vim.opt.splitbelow = true
 vim.opt.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
+-- Tabulations
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
+vim.opt.expandtab = true -- Spaces instead of tabs
+vim.opt.smartindent = true
+
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = 'split'
 
@@ -513,6 +519,8 @@ require('lazy').setup {
               callback = vim.lsp.buf.clear_references,
             })
           end
+
+          nmap('gh', ':ClangdSwitchSourceHeader<CR>', { desc = 'Switch between source/header (clang)' })
         end,
       })
 
@@ -799,6 +807,25 @@ require('lazy').setup {
     end,
   },
 
+  { -- Codium AI code completion
+    'Exafunction/codeium.vim',
+    config = function()
+      -- Change '<C-g>' here to any keycode you like.
+      vim.keymap.set('i', '<C-g>', function()
+        return vim.fn['codeium#Accept']()
+      end, { expr = true, silent = true, desc = 'Accept Codeium Completion' })
+      vim.keymap.set('i', '<C-;>', function()
+        return vim.fn['codeium#CycleCompletions'](1)
+      end, { expr = true, silent = true, desc = 'Next Codeium Completion' })
+      vim.keymap.set('i', '<C-,>', function()
+        return vim.fn['codeium#CycleCompletions'](-1)
+      end, { expr = true, silent = true, desc = 'Previous Codeium Completion' })
+      vim.keymap.set('i', '<C-x>', function()
+        return vim.fn['codeium#Clear']()
+      end, { expr = true, silent = true, desc = 'Clear Codeium Completion' })
+    end,
+  },
+
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- put them in the right spots if you want.
@@ -818,6 +845,31 @@ require('lazy').setup {
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   -- { import = 'custom.plugins' },
 }
+
+-- TODO: Rewrite in lua
+vim.cmd [[
+function! ShowSpaces(...)
+  let @/='\v(\s+$)|( +\ze\t)'
+  let oldhlsearch=&hlsearch
+  if !a:0
+    let &hlsearch=!&hlsearch
+  else
+    let &hlsearch=a:1
+  end
+  return oldhlsearch
+endfunction
+
+function! StripTrailingWhitespace()
+    if !&binary && &filetype != 'diff'
+      normal mz
+      normal Hmy
+      %s/\s\+$//e
+      normal 'yz<CR>
+      normal `z
+    endif
+endfunction
+autocmd FileType c,cpp autocmd BufWritePre <buffer> :%s/\s\+$//e
+]]
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
