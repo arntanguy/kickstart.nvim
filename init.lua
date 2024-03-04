@@ -774,11 +774,12 @@ require('lazy').setup {
       statusline.setup()
 
       -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we disable the section for
-      -- cursor information because line numbers are already enabled
+      -- default behavior. For example, here we replace the section for
+      -- cursor information with codeium status instead (it appears on the furthest right of the statusline).
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function()
-        return ''
+        -- return ''
+        return vim.api.nvim_call_function('codeium#GetStatusString', {})
       end
 
       -- ... and there is more!
@@ -810,20 +811,33 @@ require('lazy').setup {
     end,
   },
 
+  -- { -- Codium AI code completion
+  --   'Exafunction/codeium.nvim',
+  --   dependencies = {
+  --     'nvim-lua/plenary.nvim',
+  --     'hrsh7th/nvim-cmp',
+  --   },
+  --   config = function()
+  --     require('codeium').setup {}
+  --   end,
+  -- },
+
   { -- Codium AI code completion
+    -- NOTE: codium.nvim exists and has cmp support, but when I tried it only provided single-line suggestions
+    -- which is useless. Probably a bug, might want to recheck later
     'Exafunction/codeium.vim',
     config = function()
       -- Change '<C-g>' here to any keycode you like.
       vim.keymap.set('i', '<C-g>', function()
         return vim.fn['codeium#Accept']()
       end, { expr = true, silent = true, desc = 'Accept Codeium Completion' })
-      vim.keymap.set('i', '<C-;>', function()
+      vim.keymap.set('i', '<M-]>', function()
         return vim.fn['codeium#CycleCompletions'](1)
       end, { expr = true, silent = true, desc = 'Next Codeium Completion' })
-      vim.keymap.set('i', '<C-,>', function()
+      vim.keymap.set('i', '<M-[>', function()
         return vim.fn['codeium#CycleCompletions'](-1)
       end, { expr = true, silent = true, desc = 'Previous Codeium Completion' })
-      vim.keymap.set('i', '<C-x>', function()
+      vim.keymap.set('i', '<c-x>', function()
         return vim.fn['codeium#Clear']()
       end, { expr = true, silent = true, desc = 'Clear Codeium Completion' })
     end,
