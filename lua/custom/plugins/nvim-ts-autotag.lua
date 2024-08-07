@@ -2,8 +2,19 @@ return { -- Auto-close tags for HTML and JSX
   "windwp/nvim-ts-autotag",
   dependencies = { "nvim-treesitter/nvim-treesitter" },
   config = function()
-      require("nvim-ts-autotag").setup({
+    require("nvim-ts-autotag").setup({
+      opts = {
         -- Defaults
+        enable = true,
+        filetypes = {
+          "html",
+          "javascriptreact",
+          "javascript",
+          "typescript",
+          "typescriptreact",
+          "tsx",
+          "jsx",
+        },
         enable_close = true, -- Auto close tags
         enable_rename = true, -- Auto rename pairs of tags
         enable_close_on_slash = false -- Auto close on trailing </
@@ -15,6 +26,7 @@ return { -- Auto-close tags for HTML and JSX
         --     enable_close = false
         --   }
         -- }
-      })
+      }
+    })
   end
 }
