@@ -101,7 +101,7 @@ vim.g.maplocalleader = ' '
 vim.opt.number = true
 -- You can also add relative line numbers, for help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.opt.relativenumber = true
+vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -205,6 +205,33 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
+
+
+-- TODO: Rewrite in lua
+vim.cmd [[
+function! ShowSpaces(...)
+let @/='\v(\s+$)|( +\ze\t)'
+let oldhlsearch=&hlsearch
+if !a:0
+let &hlsearch=!&hlsearch
+else
+let &hlsearch=a:1
+end
+return oldhlsearch
+endfunction
+
+function! StripTrailingWhitespace()
+if !&binary && &filetype != 'diff'
+normal mz
+normal Hmy
+%s/\s\+$//e
+normal 'yz<CR>
+normal `z
+endif
+endfunction
+autocmd FileType c,cpp autocmd BufWritePre <buffer> :%s/\s\+$//e
+]]
+
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -545,6 +572,7 @@ require('lazy').setup {
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         clangd = {},
+        cmake = {},
         -- gopls = {},
         pyright = {},
         -- rust_analyzer = {},
@@ -554,7 +582,7 @@ require('lazy').setup {
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = {},
+        tsserver = {},
         --
 
         lua_ls = {
@@ -598,6 +626,8 @@ require('lazy').setup {
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format lua code
+        'tailwindcss-language-server',
+        'typescript-language-server',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -616,25 +646,25 @@ require('lazy').setup {
     end,
   },
 
-  { -- Autoformat
-    'stevearc/conform.nvim',
-    opts = {
-      notify_on_error = false,
-      format_on_save = {
-        timeout_ms = 500,
-        lsp_fallback = true,
-      },
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use a sub-list to tell conform to run *until* a formatter
-        -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
-      },
-    },
-  },
+  -- { -- Autoformat
+  --   'stevearc/conform.nvim',
+  --   opts = {
+  --     notify_on_error = false,
+  --     format_on_save = {
+  --       timeout_ms = 500,
+  --       lsp_fallback = true,
+  --     },
+  --     formatters_by_ft = {
+  --       lua = { 'stylua' },
+  --       -- Conform can also run multiple formatters sequentially
+  --       -- python = { "isort", "black" },
+  --       --
+  --       -- You can use a sub-list to tell conform to run *until* a formatter
+  --       -- is found.
+  --       -- javascript = { { "prettierd", "prettier" } },
+  --     },
+  --   },
+  -- },
 
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -724,6 +754,7 @@ require('lazy').setup {
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+          { name = 'codeium' },
         },
       }
     end,
@@ -790,16 +821,33 @@ require('lazy').setup {
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
+    event = {'BufReadPre', 'BufNewFile'},
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter-textobjects',
+    },
     config = function()
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
 
       ---@diagnostic disable-next-line: missing-fields
       require('nvim-treesitter.configs').setup {
-        ensure_installed = { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc' },
+        ensure_installed = { 'lua', 'bash', 'c', 'cpp', 'html', 'lua', 'markdown', 'markdown_inline', 'vim', 'vimdoc', 'typescript', 'javascript', 'tsx', 'yaml', 'json' },
         -- Autoinstall languages that are not installed
         auto_install = true,
         highlight = { enable = true },
-        indent = { enable = true },
+        indent =
+          {
+            enable = true,
+            disable = { 'c', 'cpp' },
+          },
+        incremental_selection = {
+          enable = true,
+          keymaps = {
+            init_selection = "<C-space>",
+            node_incremental = "<C-space>",
+            scope_incremental = false,
+            node_decremental = "<bs>",
+          },
+        },
       }
 
       -- There are additional nvim-treesitter modules that you can use to interact
@@ -811,16 +859,81 @@ require('lazy').setup {
     end,
   },
 
-  -- { -- Codium AI code completion
-  --   'Exafunction/codeium.nvim',
-  --   dependencies = {
-  --     'nvim-lua/plenary.nvim',
-  --     'hrsh7th/nvim-cmp',
-  --   },
-  --   config = function()
-  --     require('codeium').setup {}
-  --   end,
-  -- },
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    lazy = true,
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        textobjects = {
+          select = {
+            enable = true,
+
+            -- Automatically jump forward to textobj, similar to targets.vim
+            lookahead = true,
+
+            keymaps = {
+              -- You can use the capture groups defined in textobjects.scm
+              ["a="] = { query = "@assignment.outer", desc = "Select outer part of an assignment" },
+              ["i="] = { query = "@assignment.inner", desc = "Select inner part of an assignment" },
+              ["l="] = { query = "@assignment.lhs", desc = "Select left hand side of an assignment" },
+              ["r="] = { query = "@assignment.rhs", desc = "Select right hand side of an assignment" },
+
+              ["aa"] = { query = "@parameter.outer", desc = "Select outer part of a parameter/argument" },
+              ["ia"] = { query = "@parameter.inner", desc = "Select inner part of a parameter/argument" },
+
+              ["ai"] = { query = "@conditional.outer", desc = "Select outer part of a conditional" },
+              ["ii"] = { query = "@conditional.inner", desc = "Select inner part of a conditional" },
+
+              ["al"] = { query = "@loop.outer", desc = "Select outer part of a loop" },
+              ["il"] = { query = "@loop.inner", desc = "Select inner part of a loop" },
+
+              ["af"] = { query = "@call.outer", desc = "Select outer part of a function call" },
+              ["if"] = { query = "@call.inner", desc = "Select inner part of a function call" },
+
+              ["am"] = { query = "@function.outer", desc = "Select outer part of a method/function definition" },
+              ["im"] = { query = "@function.inner", desc = "Select inner part of a method/function definition" },
+
+              ["ac"] = { query = "@class.outer", desc = "Select outer part of a class" },
+              ["ic"] = { query = "@class.inner", desc = "Select inner part of a class" },
+            },
+          },
+        },
+      })
+    end,
+  },
+
+  { -- Opposition of join-line (J)
+    'AckslD/nvim-trevj.lua',
+    dependencies= {
+      'nvim-treesitter/nvim-treesitter'
+    },
+    config = function()
+      require('trevj').setup {}
+      vim.keymap.set('n', '<leader>dj', function()
+        return require('trevj').format_at_cursor()
+      end, { silent = true, desc = 'Split line (opposite of J)' })
+    end,
+  },-- Automatically add closing tags for HTML and JSX
+
+  { -- Auto-close tags for HTML and JSX
+    "windwp/nvim-ts-autotag",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    opts = {
+      -- Defaults
+      enable_close = true, -- Auto close tags
+      enable_rename = true, -- Auto rename pairs of tags
+      enable_close_on_slash = false -- Auto close on trailing </
+    },
+    -- Also override individual filetype configs, these take priority.
+    -- Empty by default, useful if one of the "opts" global settings
+    -- doesn't work well in a specific filetype
+    -- per_filetype = {
+    --   ["html"] = {
+    --     enable_close = false
+    --   }
+    -- }
+  },
+
 
   { -- Codium AI code completion
     -- NOTE: codium.nvim exists and has cmp support, but when I tried it only provided single-line suggestions
@@ -862,31 +975,6 @@ require('lazy').setup {
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
   -- { import = 'custom.plugins' },
 }
-
--- TODO: Rewrite in lua
-vim.cmd [[
-function! ShowSpaces(...)
-  let @/='\v(\s+$)|( +\ze\t)'
-  let oldhlsearch=&hlsearch
-  if !a:0
-    let &hlsearch=!&hlsearch
-  else
-    let &hlsearch=a:1
-  end
-  return oldhlsearch
-endfunction
-
-function! StripTrailingWhitespace()
-    if !&binary && &filetype != 'diff'
-      normal mz
-      normal Hmy
-      %s/\s\+$//e
-      normal 'yz<CR>
-      normal `z
-    endif
-endfunction
-autocmd FileType c,cpp autocmd BufWritePre <buffer> :%s/\s\+$//e
-]]
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
