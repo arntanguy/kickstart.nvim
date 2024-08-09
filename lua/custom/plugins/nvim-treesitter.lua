@@ -4,6 +4,7 @@ return { -- Highlight, edit, and navigate code
   event = {'BufReadPre', 'BufNewFile'},
   dependencies = {
     'nvim-treesitter/nvim-treesitter-textobjects',
+    'JoosepAlviste/nvim-ts-context-commentstring' -- language/context aware comment strings (ex: for JSX)
   },
   config = function()
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
