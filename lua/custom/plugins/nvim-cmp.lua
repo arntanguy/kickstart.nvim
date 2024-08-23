@@ -23,6 +23,7 @@ return { -- Autocompletion
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-path',
     'Exafunction/codeium.vim',
+    "roobert/tailwindcss-colorizer-cmp.nvim",
 
     -- If you want to add a bunch of pre-configured snippets,
     --    you can use this plugin to help you. It even has snippets
@@ -35,8 +36,34 @@ return { -- Autocompletion
     local cmp = require 'cmp'
     local luasnip = require 'luasnip'
     luasnip.config.setup {}
+    local tailwindcss_colors = require('tailwindcss-colorizer-cmp')
+
+    -- Controls how the completion items appear
+    -- Prefix items by type
+    -- Display tailwindcss colors as a square
+    local cmp_formatter = function(entry, vim_item)
+        -- vim_item as processed by tailwindcss-colorizer-cmp
+        vim_item = tailwindcss_colors.formatter(entry, vim_item)
+        -- change menu (name of source)
+        vim_item.menu = ({
+            nvim_lsp = "[LSP]",
+            buffer = "[Buf]",
+            path = "[Path]",
+            emoji = "[Emoji]",
+            luasnip = "[LuaSnip]",
+            vsnip = "[VSCode Snippet]",
+            calc = "[Calc]",
+            spell = "[Spell]",
+        })[entry.source.name]
+        return vim_item
+    end
 
     cmp.setup {
+      formatting = {
+          -- changing the order of fields so the icon is the first
+          fields = { "menu", "abbr", "kind" },
+          format = cmp_formatter,
+      },
       snippet = {
         expand = function(args)
           luasnip.lsp_expand(args.body)

@@ -5,6 +5,7 @@ return { -- LSP Configuration & Plugins
     'williamboman/mason.nvim',
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
+    'themaxmarchuk/tailwindcss-colors.nvim',
 
     -- Useful status updates for LSP.
     -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -149,6 +150,12 @@ return { -- LSP Configuration & Plugins
       -- But for many setups, the LSP (`tsserver`) will work just fine
       tsserver = {},
       --
+
+      tailwindcss = {
+        on_attach = function(client, bufnr)
+          require("tailwindcss-colors").buf_attach(bufnr)
+        end
+      },
 
       lua_ls = {
         -- cmd = {...},
