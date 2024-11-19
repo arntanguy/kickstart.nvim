@@ -14,7 +14,11 @@ return { -- Highlight, edit, and navigate code
       ensure_installed = { 'lua', 'bash', 'c', 'cpp', 'html', 'lua', 'markdown', 'markdown_inline', 'vim', 'vimdoc', 'typescript', 'javascript', 'tsx', 'yaml', 'json' },
       -- Autoinstall languages that are not installed
       auto_install = true,
-      highlight = { enable = true },
+      highlight =
+        {
+          enable = true,
+          additional_vim_regex_highlighting = true,
+        },
       indent =
         {
           enable = true,

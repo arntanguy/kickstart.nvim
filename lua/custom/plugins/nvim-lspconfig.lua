@@ -5,6 +5,7 @@ return { -- LSP Configuration & Plugins
     'williamboman/mason.nvim',
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
+    'Shatur/neovim-tasks', -- XXX: only required for clangd, how to express this
 
     -- Useful status updates for LSP.
     -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -50,25 +51,25 @@ return { -- LSP Configuration & Plugins
         -- In this case, we create a function that lets us more easily define mappings specific
         -- for LSP related items. It sets the mode, buffer and description for us each time.
         local map = function(keys, func, desc)
-          vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+          vim.keymap.set('n', keys, func, { buffer = event.buf, desc =  desc })
         end
 
         -- Jump to the definition of the word under your cursor.
         --  This is where a variable was first declared, or where a function is defined, etc.
         --  To jump back, press <C-T>.
-        map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+        map('<leader>gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
 
         -- Find references for the word under your cursor.
-        map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+        map('<leader>gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
 
         -- Jump to the implementation of the word under your cursor.
         --  Useful when your language has ways of declaring types without an actual implementation.
-        map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+        map('<leader>gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
 
         -- Jump to the type of the word under your cursor.
         --  Useful when you're not sure what type a variable is and you want to see
         --  the definition of its *type*, not where it was *defined*.
-        map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+        map('<leader>gD', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
 
         -- Fuzzy find all the symbols in your current document.
         --  Symbols are things like variables, functions, types, etc.
@@ -88,6 +89,7 @@ return { -- LSP Configuration & Plugins
 
         -- Opens a popup that displays documentation about the word under your cursor
         --  See `:help K` for why this keymap
+        map('<leader>cK', vim.lsp.buf.hover, 'Hover Documentation')
         map('K', vim.lsp.buf.hover, 'Hover Documentation')
 
         -- WARN: This is not Goto Definition, this is Goto Declaration.
@@ -98,6 +100,7 @@ return { -- LSP Configuration & Plugins
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         if client.name == 'clangd' then
           map('gh', ':ClangdSwitchSourceHeader<CR>', '[G]o to [H]eader or Source (clang)')
+          map('<leader>cb', ':Task start cmake build<CR>', '[C]ode [B]uild (cmake)')
         end
 
         -- The following two autocommands are used to highlight references of the
@@ -149,7 +152,6 @@ return { -- LSP Configuration & Plugins
       -- But for many setups, the LSP (`tsserver`) will work just fine
       tsserver = {},
       --
-
       lua_ls = {
         -- cmd = {...},
         -- filetypes { ...},
@@ -193,6 +195,7 @@ return { -- LSP Configuration & Plugins
       'stylua', -- Used to format lua code
       'tailwindcss-language-server',
       'typescript-language-server',
+      'yaml-language-server',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 

@@ -115,7 +115,7 @@ In the file: `lua/custom/plugins/autopairs.lua`, add:
 -- File: lua/custom/plugins/autopairs.lua
 
 return {
-  "windwp/nvim-autopairs",
+  -- "windwp/nvim-autopairs",
   -- Optional dependency
   dependencies = { 'hrsh7th/nvim-cmp' },
   config = function()
