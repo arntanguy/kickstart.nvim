@@ -23,7 +23,8 @@ return { -- Autocompletion
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-path',
     'Exafunction/codeium.nvim',
-    'brenoprata10/nvim-highlight-colors',
+    -- lspkind
+    'onsails/lspkind.nvim',
 
     -- If you want to add a bunch of pre-configured snippets,
     --    you can use this plugin to help you. It even has snippets
@@ -36,35 +37,37 @@ return { -- Autocompletion
     local cmp = require 'cmp'
     local luasnip = require 'luasnip'
     luasnip.config.setup {}
-    local nvim_highlight_colors = require("nvim-highlight-colors")
 
     -- Controls how the completion items appear
-    -- Prefix items by type
-    -- Display tailwindcss colors as a square
-    local cmp_formatter = function(entry, vim_item)
-        -- vim_item as processed by tailwindcss-colorizer-cmp
-        vim_item = nvim_highlight_colors.format(entry, vim_item)
+    -- lspkind formatter (icons similar to vscode)
+    local lspkind = require("lspkind")
+    local cmp_lspkind = lspkind.cmp_format({
+      mode = 'symbol', -- show only symbol annotations
+      maxwidth = {
+        -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+        -- can also be a function to dynamically calculate max width such as
+        -- menu = function() return math.floor(0.45 * vim.o.columns) end,
+        menu = 50, -- leading text (labelDetails)
+        abbr = 50, -- actual suggestion item
+      },
+      symbol_map = { Codeium = "", },
+      ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+      show_labelDetails = true, -- show labelDetails in menu. Disabled by default
 
-        -- change menu (name of source)
-        vim_item.menu = ({
-            nvim_lsp = "[LSP]",
-            buffer = "[Buf]",
-            path = "[Path]",
-            emoji = "[Emoji]",
-            luasnip = "[LuaSnip]",
-            vsnip = "[VSCode Snippet]",
-            calc = "[Calc]",
-            spell = "[Spell]",
-            Codeium = "[Codeium]",
-        })[entry.source.name]
+      -- The function below will be called before any actual modifications from lspkind
+      -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+      before = function (entry, vim_item)
+        -- ...
         return vim_item
-    end
+      end
+    })
 
     cmp.setup {
       formatting = {
           -- changing the order of fields so the icon is the first
           fields = { "menu", "abbr", "kind" },
-          format = cmp_formatter,
+          -- format = cmp_formatter,
+          format = cmp_lspkind
       },
       snippet = {
         expand = function(args)
