@@ -1,6 +1,6 @@
 return { -- Collection of various small independent plugins/modules
   'echasnovski/mini.nvim',
-  dependencies = { 'Exafunction/codeium.vim' },
+  dependencies = { 'Exafunction/codeium.nvim' },
   config = function()
     -- Better Around/Inside textobjects
     --
@@ -28,8 +28,8 @@ return { -- Collection of various small independent plugins/modules
     -- cursor information with codeium status instead (it appears on the furthest right of the statusline).
     ---@diagnostic disable-next-line: duplicate-set-field
     statusline.section_location = function()
-      -- return ''
-      return vim.api.nvim_call_function('codeium#GetStatusString', {})
+      -- return vim.api.nvim_call_function('codeium#GetStatusString', {})
+      return require('codeium.virtual_text').status_string()
     end
 
     -- ... and there is more!

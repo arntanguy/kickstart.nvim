@@ -22,7 +22,7 @@ return { -- Autocompletion
     --  into multiple repos for maintenance purposes.
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-path',
-    'Exafunction/codeium.vim',
+    'Exafunction/codeium.nvim',
     'brenoprata10/nvim-highlight-colors',
 
     -- If you want to add a bunch of pre-configured snippets,
@@ -55,6 +55,7 @@ return { -- Autocompletion
             vsnip = "[VSCode Snippet]",
             calc = "[Calc]",
             spell = "[Spell]",
+            Codeium = "[Codeium]",
         })[entry.source.name]
         return vim_item
     end
@@ -113,9 +114,9 @@ return { -- Autocompletion
       },
       sources = {
         { name = 'nvim_lsp' },
+        { name = 'codeium' },
         { name = 'luasnip' },
         { name = 'path' },
-        { name = 'codeium' },
       },
     }
   end,
