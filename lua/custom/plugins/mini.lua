@@ -28,8 +28,17 @@ return { -- Collection of various small independent plugins/modules
     -- cursor information with codeium status instead (it appears on the furthest right of the statusline).
     ---@diagnostic disable-next-line: duplicate-set-field
     statusline.section_location = function()
-      -- return vim.api.nvim_call_function('codeium#GetStatusString', {})
-      return require('codeium.virtual_text').status_string()
+      local value = ''
+      local codeium = require('codeium.virtual_text').status_string()
+      value = value .. codeium
+
+      -- check if this is an nvim-remote instance
+      if vim.g.remote_neovim_host then
+        local remote_name = (" | Remote: %s"):format(vim.uv.os_gethostname()) or ""
+        value = value .. remote_name
+      end
+
+      return value
     end
 
     -- ... and there is more!

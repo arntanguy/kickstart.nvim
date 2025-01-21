@@ -26,7 +26,7 @@ return {
             })
           end,
 
-         -- Remote configuration
+  -- Remote configuration
   remote = {
     -- List of directories that should be copied over
     copy_dirs = {
@@ -40,8 +40,8 @@ return {
       },
       -- What to copy to remote's Neovim cache directory
       cache = {
-        base = vim.env.HOME, -- vim.fn.stdpath("cache"),
-        dirs = {'.codeium'},
+        base = vim.fn.stdpath("cache"),
+        dirs = {'codeium'},
         compression = {
           enabled = true,
         },
