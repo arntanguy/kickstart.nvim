@@ -17,29 +17,29 @@ return { -- Collection of various small independent plugins/modules
     -- - sr)'  - [S]urround [R]eplace [)] [']
     require('mini.surround').setup()
 
-    -- Simple and easy statusline.
-    --  You could remove this setup call if you don't like it,
-    --  and try some other statusline plugin
-    local statusline = require 'mini.statusline'
-    statusline.setup()
-
-    -- You can configure sections in the statusline by overriding their
-    -- default behavior. For example, here we replace the section for
-    -- cursor information with codeium status instead (it appears on the furthest right of the statusline).
-    ---@diagnostic disable-next-line: duplicate-set-field
-    statusline.section_location = function()
-      local value = ''
-      local codeium = require('codeium.virtual_text').status_string()
-      value = value .. codeium
-
-      -- check if this is an nvim-remote instance
-      if vim.g.remote_neovim_host then
-        local remote_name = (" | Remote: %s"):format(vim.g.remote_neovim_unique_host_id) or ""
-        value = value .. remote_name
-      end
-
-      return value
-    end
+    -- -- Simple and easy statusline.
+    -- --  You could remove this setup call if you don't like it,
+    -- --  and try some other statusline plugin
+    -- local statusline = require 'mini.statusline'
+    -- statusline.setup()
+    --
+    -- -- You can configure sections in the statusline by overriding their
+    -- -- default behavior. For example, here we replace the section for
+    -- -- cursor information with codeium status instead (it appears on the furthest right of the statusline).
+    -- ---@diagnostic disable-next-line: duplicate-set-field
+    -- statusline.section_location = function()
+    --   local value = ''
+    --   local codeium = require('codeium.virtual_text').status_string()
+    --   value = value .. codeium
+    --
+    --   -- check if this is an nvim-remote instance
+    --   if vim.g.remote_neovim_host then
+    --     local remote_name = (" | Remote: %s"):format(vim.g.remote_neovim_unique_host_id) or ""
+    --     value = value .. remote_name
+    --   end
+    --
+    --   return value
+    -- end
 
     -- ... and there is more!
     --  Check out: https://github.com/echasnovski/mini.nvim

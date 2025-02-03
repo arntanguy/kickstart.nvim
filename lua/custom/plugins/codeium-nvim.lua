@@ -43,5 +43,9 @@ return {
         }
       }
     })
+    -- Setup lualine
+    require('codeium.virtual_text').set_statusbar_refresh(function()
+    	require('lualine').refresh()
+    end)
   end,
 }
