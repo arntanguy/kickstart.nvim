@@ -34,7 +34,7 @@ return { -- Collection of various small independent plugins/modules
 
       -- check if this is an nvim-remote instance
       if vim.g.remote_neovim_host then
-        local remote_name = (" | Remote: %s"):format(vim.uv.os_gethostname()) or ""
+        local remote_name = (" | Remote: %s"):format(vim.g.remote_neovim_unique_host_id) or ""
         value = value .. remote_name
       end
 
