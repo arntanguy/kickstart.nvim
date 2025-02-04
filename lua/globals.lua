@@ -5,6 +5,17 @@ vim.opt.exrc = true
 -- Hide neovim's command line by default
 vim.o.cmdheight = 0
 
+-- Automatically rename tmux window to current buffer name
+vim.cmd [[
+augroup tmux
+  autocmd!
+  if exists('$TMUX')
+  autocmd BufEnter,FocusGained * call system("tmux rename-window " . expand("%:t"))
+  autocmd VimLeave * call system("tmux rename-window zsh")
+  endif
+augroup END
+]]
+
 -- Use ESC to exit the terminal prompt 
 vim.cmd [[
 au TermOpen * tnoremap <Esc><Esc> <c-\><c-n>
