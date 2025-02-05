@@ -5,7 +5,6 @@ return { -- LSP Configuration & Plugins
     'williamboman/mason.nvim',
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
-    'Shatur/neovim-tasks', -- XXX: only required for clangd, how to express this
 
     -- Useful status updates for LSP.
     -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -100,7 +99,6 @@ return { -- LSP Configuration & Plugins
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         if client.name == 'clangd' then
           map('gh', ':ClangdSwitchSourceHeader<CR>', '[G]o to [H]eader or Source (clang)')
-          map('<leader>cb', ':Task start cmake build<CR>', '[C]ode [B]uild (cmake)')
         end
 
         -- The following two autocommands are used to highlight references of the

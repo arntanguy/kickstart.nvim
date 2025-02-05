@@ -1,4 +1,6 @@
 return {
-  'stevearc/overseer.nvim',
+  -- 'stevearc/overseer.nvim',
+  'overseer.nvim',
+  dev = true,
   opts = {},
 }

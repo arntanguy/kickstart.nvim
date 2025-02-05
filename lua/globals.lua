@@ -3,6 +3,8 @@
 vim.opt.exrc = true
 
 -- Hide neovim's command line by default
+-- XXX: Do this when https://github.com/neovim/neovim/issues/22478 is solved
+-- Until then it causes too many annoying 'Press ENTER to continue' prompts
 vim.o.cmdheight = 0
 
 -- Automatically rename tmux window to current buffer name
