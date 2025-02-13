@@ -1,0 +1,9 @@
+[submodule "lua/custom/local_plugins/cmake-tools.nvim"]
+	path = lua/custom/local_plugins/cmake-tools.nvim
+	url = git@github.com:arntanguy/cmake-tools.nvim
+[submodule "lua/custom/local_plugins/overseer.nvim"]
+	path = lua/custom/local_plugins/overseer.nvim
+	url = git@github.com:arntanguy/overseer.nvim
+[submodule "lua/custom/local_plugins/remote-nvim.nvim"]
+	path = lua/custom/local_plugins/remote-nvim.nvim
+	url = git@github.com:arntanguy/remote-nvim.nvim

@@ -266,7 +266,7 @@ local lazy_config = {
         local remote_path = vim.fn.stdpath('config') .. '/../local_plugins/nvim/' .. plugin.name
         return remote_path
       else
-        local local_path = "~/devel/nvim/" .. plugin.name
+        local local_path = vim.fn.stdpath('config') .. "/lua/custom/local_plugins/" .. plugin.name
         return local_path
       end
     end,
