@@ -21,6 +21,7 @@ return { -- Autocompletion
     --  nvim-cmp does not ship with all sources by default. They are split
     --  into multiple repos for maintenance purposes.
     'hrsh7th/cmp-nvim-lsp',
+    'hrsh7th/cmp-nvim-lsp-signature-help',
     'hrsh7th/cmp-path',
     'Exafunction/codeium.nvim',
     -- lspkind
@@ -117,6 +118,7 @@ return { -- Autocompletion
       },
       sources = {
         { name = 'nvim_lsp' },
+        { name = 'nvim_lsp_signature_help' }, -- nvim-cmp source for displaying function signatures with the current parameter emphasized
         { name = 'codeium' },
         { name = 'luasnip' },
         { name = 'path' },
