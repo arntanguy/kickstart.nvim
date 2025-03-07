@@ -1,7 +1,8 @@
 return {
   'akinsho/toggleterm.nvim',
-  dependencies = { 
-    'ryanmsndyder/toggleterm-manager.nvim' -- for telescope
+  dependencies = {
+    'ryanmsndyder/toggleterm-manager.nvim', -- for telescope
+    'folke/which-key.nvim'
   },
   config = function()
     require("toggleterm").setup({
@@ -24,5 +25,10 @@ return {
       vim.keymap.set('n', '<leader>tm', ':Telescope toggleterm_manager<CR>', { desc = '[T]erm [S]elect' })
       vim.keymap.set('n', '<leader>tn', ':ToggleTermSetName<CR>', { desc = '[T]erm [R]ename' })
       vim.keymap.set('n', '<leader>tf', ':ToggleTerm direction=float name=floatterm<CR>', { desc = '[T]erm [F]loat' })
+
+      require('which-key').add {
+        { '<leader>t', group = '[T]erminal', icon = ""},
+        { '<leader>t_', hidden = true },
+      }
   end
 }

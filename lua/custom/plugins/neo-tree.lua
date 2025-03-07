@@ -8,10 +8,12 @@ return {
     "nvim-lua/plenary.nvim",
     "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
     "MunifTanjim/nui.nvim",
+    "folke/which-key.nvim",
   },
   config = function ()
+    local wk = require("which-key")
     require('neo-tree').setup {
-      vim.keymap.set('n', '<Space>se',
+      wk.add({'<leader>se',
         function()
           local reveal_file = vim.fn.expand('%:p')
           if (reveal_file == '') then
@@ -31,7 +33,10 @@ return {
             reveal_file = reveal_file, -- path to file or folder to reveal
             reveal_force_cwd = true,   -- change cwd without asking if needed
           })
-        end, { desc = '[S]earch in file [Explorer] (open Neotree on current file)' }
+        end,
+        desc = '[S]earch in file [E]xplorer (open Neotree on current file)',
+        icon='📂'
+        }
       )
     }
   end,

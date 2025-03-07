@@ -165,10 +165,7 @@ vim.opt.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+-- See nvim-lspconfig.lua
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -332,18 +329,20 @@ require('lazy').setup ({
 
       -- Document existing key chains
       require('which-key').add {
-        { '<leader>c', group = '[C]ode'},
+        { '<leader>c', group = '[C]ode', icon='💻'},
         { '<leader>c_', hidden = true },
-        { '<leader>d', group = '[D]ocument'},
+        { '<leader>d', group = '[D]ocument', icon='📜'},
         { '<leader>d_', hidden = true },
         { '<leader>r',  group = '[R]ename'},
         { '<leader>r_', hidden = true },
-        { '<leader>s', group = '[S]earch'},
+        { '<leader>s', group = '[S]earch', icon='🔎'},
         { '<leader>s_', hidden = true },
-        { '<leader>w', group = '[W]orkspace'},
+        { '<leader>w', group = '[W]orkspace', icon='🗂'},
         { '<leader>w_', hidden = true },
-        { '<leader>g', group = '[G]oto'},
+        { '<leader>g', group = '[G]oto', icon='👀'},
         { '<leader>g_', hidden = true },
+        { '<leader>n', group = '[N]eorg', icon='📝'},
+        { '<leader>n_', hidden = true },
       }
     end,
   },
@@ -468,16 +467,17 @@ require('lazy').setup ({
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-      vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-      vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-      vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-      vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-      vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
-      vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      local wk = require('which-key')
+      wk.add({'<leader>sh', builtin.help_tags, desc = '[S]earch [H]elp', icon='❓' })
+      wk.add({'<leader>sk', builtin.keymaps, desc = '[S]earch [K]eymaps', icon='🔑' })
+      wk.add({'<leader>sf', builtin.find_files, desc = '[S]earch [F]iles', icon='📜' })
+      wk.add({'<leader>ss', builtin.builtin, desc = '[S]earch [S]elect Telescope', icon='🔭' })
+      wk.add({'<leader>sw', builtin.grep_string, desc = '[S]earch current [W]ord', icon='🔎' })
+      wk.add({'<leader>sg', builtin.live_grep, desc = '[S]earch [G]rep', icon='🔎' })
+      wk.add({'<leader>sd', builtin.diagnostics, desc = '[S]earch [D]iagnostics', icon='🐞' })
+      wk.add({'<leader>sr', builtin.resume, desc = '[S]earch [R]esume', icon='🔎' })
+      wk.add({'<leader>s.', builtin.oldfiles, desc = '[S]earch Recent Files ("." for repeat)', icon='📜' })
+      wk.add({'<leader><leader>', builtin.buffers, desc = '[ ] Find existing buffers', icon='📜' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
