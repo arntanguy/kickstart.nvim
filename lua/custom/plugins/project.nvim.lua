@@ -18,6 +18,7 @@ return {
           patterns = { ".git", ".devcontainer", "package.json" },
 
           exclude_dirs = {"*/cmake"},
+          silent_chdir = false,
       }
     )
     require('telescope').load_extension('projects')

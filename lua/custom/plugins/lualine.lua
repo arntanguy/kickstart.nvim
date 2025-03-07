@@ -280,7 +280,7 @@ return {
         end
 
         add_remote_neovim_section()
-        add_cmake_tools_section()
+        -- add_cmake_tools_section()
         add_codeium_section()
 
         require('lualine').setup {
