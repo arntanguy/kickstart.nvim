@@ -18,12 +18,6 @@ augroup tmux
 augroup END
 ]]
 
--- Use ESC to exit the terminal prompt 
--- vim.cmd [[
--- au TermOpen * tnoremap <Esc><Esc> <c-\><c-n>
--- au FileType fzf tunmap <Esc><Esc>
--- ]]
-
 P = function(v)
   vim.print(v)
   return v

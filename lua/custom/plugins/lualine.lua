@@ -1,8 +1,9 @@
 return {
     'nvim-lualine/lualine.nvim',
-    dependencies = { 
+    dependencies = {
         'nvim-tree/nvim-web-devicons',
         'Exafunction/codeium.nvim',
+        'f-person/git-blame.nvim'
     },
 
     config = function()
@@ -264,6 +265,22 @@ return {
             return sections
         end
 
+
+        local add_git_blame = function()
+            local git_blame = require('gitblame')
+            -- This disables showing of the blame text next to the cursor
+            vim.g.gitblame_display_virtual_text = 0
+            local lualine_c = {
+                function()
+                    return git_blame.get_current_blame_text()
+                end,
+                cond = function()
+                    return git_blame.is_blame_text_available()
+                end
+            }
+            ins_left(lualine_c)
+        end
+
         -- Codeium
         local add_codeium_section = function()
             local codeium = require'codeium.virtual_text';
@@ -281,10 +298,15 @@ return {
 
         add_remote_neovim_section()
         -- add_cmake_tools_section()
+        add_git_blame()
         add_codeium_section()
 
         require('lualine').setup {
             sections = sections,
+            options = {
+                globalstatus = true,
+                theme = 'tokyonight'
+            }
         }
 
 
