@@ -28,7 +28,9 @@ return {
       vim.keymap.set('n', '<leader>ts', ':TermSelect<CR>', { desc = '[T]erm [S]elect' })
       vim.keymap.set('n', '<leader>tm', ':Telescope toggleterm_manager<CR>', { desc = '[T]erm [S]elect' })
       vim.keymap.set('n', '<leader>tn', ':ToggleTermSetName<CR>', { desc = '[T]erm [R]ename' })
-      vim.keymap.set('n', '<leader>tf', ':ToggleTerm direction=float name=floatterm<CR>', { desc = '[T]erm [F]loat' })
+      vim.keymap.set('n', '<leader>tf', ':9ToggleTerm direction=float name=floatterm9<CR>', { desc = '[T]erm [F]loat 9' })
+      vim.keymap.set('n', '<leader>t1', ':1ToggleTerm size=20 name=termbottom1<CR>', { desc = '[T]erm [B]ottom 1' })
+      vim.keymap.set('n', '<leader>t2', ':2ToggleTerm size=20 name=termbottom2<CR>', { desc = '[T]erm [R]ight 2' })
 
       require('which-key').add {
         { '<leader>t', group = '[T]erminal', icon = ""},
