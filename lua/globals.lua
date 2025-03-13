@@ -19,10 +19,10 @@ augroup END
 ]]
 
 -- Use ESC to exit the terminal prompt 
-vim.cmd [[
-au TermOpen * tnoremap <Esc><Esc> <c-\><c-n>
-au FileType fzf tunmap <Esc><Esc>
-]]
+-- vim.cmd [[
+-- au TermOpen * tnoremap <Esc><Esc> <c-\><c-n>
+-- au FileType fzf tunmap <Esc><Esc>
+-- ]]
 
 P = function(v)
   vim.print(v)
@@ -41,3 +41,5 @@ end
 -- Should only exist on lua files
 vim.keymap.set('n', '<leader><leader>x', ':write<CR>:source<CR>', { desc = 'Save and source current file' })
 vim.keymap.set('n', '<leader>t', '<Plug>PlanaryTestFile', { desc = 'Run test file using plenary' })
+-- exit to normal mode. Mimics the config for toggleterm.nvim
+vim.keymap.set('i', '<C-j><C-k>', '<Esc>', { desc = 'Exit to normal mode' })

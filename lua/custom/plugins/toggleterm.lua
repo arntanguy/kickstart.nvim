@@ -9,7 +9,11 @@ return {
     })
       _G.set_terminal_keymaps = function()
         local opts = {buffer = 0}
-        vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
+        -- Use of the default <Esc><Esc> binding is confusing with nested interactive sessions in terminal
+        -- e.g neovim within a neovim terminal
+        -- Use of the alternative default <C-\><C-n> to exit terminal mode is cumbursome to type
+        -- Thus bind <C-j><C-k> to exit terminal mode
+        vim.keymap.set('t', '<C-j><C-k>', [[<C-\><C-n>]], opts)
         vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
         vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
         vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
