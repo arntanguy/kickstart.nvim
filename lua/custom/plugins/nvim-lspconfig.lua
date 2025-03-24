@@ -48,10 +48,17 @@ return { -- LSP Configuration & Plugins
         -- many times.
         --
         -- In this case, we create a function that lets us more easily define mappings specific
-        -- for LSP related items. It sets the mode, buffer and description for us each time.
+        -- for LSP relted items. It sets the mode, buffer and description for us each time.
         local map = function(keys, func, desc)
           vim.keymap.set('n', keys, func, { buffer = event.buf, desc =  desc })
         end
+
+        require('which-key').add {
+          { '<leader>cs', group = '[C]ode [S]earch', icon='🔎'},
+          { '<leader>cs_', hidden = true },
+          { '<leader>g', group = '[G]oto', icon='👀'},
+          { '<leader>g_', hidden = true },
+        }
 
         -- Jump to the definition of the word under your cursor.
         --  This is where a variable was first declared, or where a function is defined, etc.
@@ -76,7 +83,7 @@ return { -- LSP Configuration & Plugins
 
         -- Fuzzy find all the symbols in your current workspace
         --  Similar to document symbols, except searches over your whole project.
-        map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+        map('<leader>css', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[C]ode [S]earch [S]ymbols')
 
         -- Rename the variable under your cursor
         --  Most Language Servers support renaming across files, etc.
