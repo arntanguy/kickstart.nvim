@@ -7,3 +7,6 @@
 [submodule "lua/custom/local_plugins/remote-nvim.nvim"]
 	path = lua/custom/local_plugins/remote-nvim.nvim
 	url = git@github.com:arntanguy/remote-nvim.nvim
+[submodule "lua/custom/local_plugins/cd-project.nvim"]
+	path = lua/custom/local_plugins/cd-project.nvim
+	url = git@github.com:LintaoAmons/cd-project.nvim.git

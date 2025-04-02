@@ -18,7 +18,8 @@ return {
         -- A sample implementation using WezTerm tab is at: https://github.com/amitds1997/remote-nvim.nvim/wiki/Configuration-recipes
         client_callback = function(port, workspace_config)
           local cmd = ""
-          if vim.env.TERM == "tmux-256color" then
+          if vim.env.TERM == "tmux-256color" or vim.env.TERM == "xterm-256color"
+          then
             cmd = ("tmux new-window -n '%s' nvim --server localhost:%s --remote-ui"):format(
             workspace_config.host,
             port

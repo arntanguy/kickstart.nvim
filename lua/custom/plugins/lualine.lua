@@ -251,10 +251,11 @@ return {
 
         local add_remote_neovim_section = function()
             -- Remote Neovim
-            ins_left(
+            ins_right(
                 {
                     function()
-                        return vim.g.remote_neovim_host and ("%s"):format(vim.g.remote_neovim_unique_host_id or vim.uv.os_gethostname()) or ""
+                        local host = vim.g.remote_neovim_host and ("%s"):format(vim.g.remote_neovim_unique_host_id or vim.uv.os_gethostname()) or ""
+                        return host:sub(1, 3)
                     end,
                     padding = { right = 1, left = 1 },
                     icon = "",
@@ -272,7 +273,9 @@ return {
             vim.g.gitblame_display_virtual_text = 0
             local lualine_c = {
                 function()
-                    return git_blame.get_current_blame_text()
+                    -- keep max 15 char
+                    local blame = git_blame.get_current_blame_text():sub(1, 15)
+                    return blame
                 end,
                 cond = function()
                     return git_blame.is_blame_text_available()
