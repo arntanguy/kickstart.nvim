@@ -4,6 +4,7 @@ return {
   -- optional: provides snippets for the snippet source
   dependencies = { 
     'rafamadriz/friendly-snippets',
+    'arntanguy/mc-rtc-snippets',
     'xzbdmw/colorful-menu.nvim'
   },
 

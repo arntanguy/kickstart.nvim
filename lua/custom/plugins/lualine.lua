@@ -308,7 +308,7 @@ return {
             sections = sections,
             options = {
                 globalstatus = true,
-                theme = 'tokyonight'
+                -- theme = 'tokyonight'
             }
         }
 
