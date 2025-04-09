@@ -49,7 +49,7 @@ return {
           copy_dirs = {
             local_plugins = {
               -- home folder
-              base = "/home/arnaud/devel/nvim",
+              base = vim.fn.stdpath('config') .. "/lua/custom/local_plugins",
               dirs = "*",
               compression = {
                 enabled = true,
@@ -67,11 +67,11 @@ return {
             },
             -- What to copy to remote's Neovim cache directory
             cache = {
-              base = vim.fn.stdpath("cache"),
-              dirs = {'codeium'},
-              compression = {
-                enabled = true,
-              },
+              -- base = vim.fn.stdpath("cache"),
+              -- dirs = {'codeium'},
+              -- compression = {
+              --   enabled = true,
+              -- },
             },
           },
         }

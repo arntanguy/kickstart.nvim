@@ -255,7 +255,7 @@ return {
                 {
                     function()
                         local host = vim.g.remote_neovim_host and ("%s"):format(vim.g.remote_neovim_unique_host_id or vim.uv.os_gethostname()) or ""
-                        return host:sub(1, 3)
+                        return host:sub(1, 10)
                     end,
                     padding = { right = 1, left = 1 },
                     icon = "",
@@ -301,7 +301,7 @@ return {
 
         add_remote_neovim_section()
         -- add_cmake_tools_section()
-        add_git_blame()
+        -- add_git_blame()
         add_codeium_section()
 
         require('lualine').setup {

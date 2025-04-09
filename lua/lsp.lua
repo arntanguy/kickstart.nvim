@@ -24,6 +24,7 @@
 --
 vim.lsp.enable('clangd')
 -- vim.lsp.enable('lua-language-server')
+vim.lsp.enable('pylsp')
 
 -- Add additional keymaps
 vim.api.nvim_create_autocmd('LspAttach', {

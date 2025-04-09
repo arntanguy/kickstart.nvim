@@ -10,7 +10,7 @@ return {
         -- your configuration comes here
         -- for example
         enabled = true,  -- if you want to enable the plugin
-        message_template = '  <author> • <date> • <summary>',
+        message_template = '<author> • <date> • <summary>',
         date_format = '%r'
     },
 }
