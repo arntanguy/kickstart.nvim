@@ -9,4 +9,13 @@ return {
     "Pipfile",
     "pyrightconfig.json",
   },
+  settings = {
+    pylsp = {
+      plugins = {
+        pyflakes = {enabled = false},
+        pylint = {enabled = false},
+        pycodestyle = {enabled = false}
+      },
+    },
+  }
 }
