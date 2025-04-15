@@ -7,7 +7,10 @@ return {
     "Saghen/blink.cmp"
   },
 
-  config = function()
+  opts = function()
+    require('mason').setup()
+    local capabilities = require("blink.cmp").get_lsp_capabilities()
+
     vim.diagnostic.config({
       -- Use the default configuration
       virtual_lines = true
@@ -113,103 +116,154 @@ return {
       })
     end
 
-
     add_keymaps()
 
-    local capabilities = require("blink.cmp").get_lsp_capabilities()
-    require("mason").setup()
-    require("mason-lspconfig").setup(
-      {
-        ensure_installed = {"clangd", "pylsp", "lua_ls"},
-        automatic_installation = true,
-        handlers = {
-          pylsp = function()
-            require('lspconfig').pylsp.setup({
-              -- See https://waylonwalker.com/setup-pylsp/
-              settings = {
-                pylsp = {
-                  configurationSources = {"flake8"},
-                  plugins = {
-                    jedi_completion = {enabled = true},
-                    jedi_hover = {enabled = true},
-                    jedi_references = {enabled = true},
-                    jedi_signature_help = {enabled = true},
-                    jedi_symbols = {enabled = true, all_scopes = true},
-                    pycodestyle = {enabled = false},
-                    flake8 = {
-                      enabled = true,
-                      ignore = {},
-                      maxLineLength = 160
-                    },
-                    mypy = {enabled = true},
-                    isort = {enabled = false},
-                    yapf = {enabled = false},
-                    pylint = {enabled = false},
-                    pydocstyle = {enabled = false},
-                    mccabe = {enabled = false},
-                    preload = {enabled = false},
-                    rope_completion = {enabled = false}
-                  }
+    return {
+      ensure_installed = {"clangd", "pylsp", "lua_ls"},
+      automatic_installation = false,
+      handlers = {
+        pylsp = function()
+          require("lspconfig")['pylsp'].setup{
+            capabilities = capabilities,
+            -- See https://waylonwalker.com/setup-pylsp/
+            settings = {
+              pylsp = {
+                configurationSources = {"flake8"},
+                plugins = {
+                  jedi_completion = {enabled = true},
+                  jedi_hover = {enabled = true},
+                  jedi_references = {enabled = true},
+                  jedi_signature_help = {enabled = true},
+                  jedi_symbols = {enabled = true, all_scopes = true},
+                  pycodestyle = {enabled = false},
+                  flake8 = {
+                    enabled = true,
+                    ignore = {},
+                    maxLineLength = 160
+                  },
+                  mypy = {enabled = true},
+                  isort = {enabled = false},
+                  yapf = {enabled = false},
+                  pylint = {enabled = false},
+                  pydocstyle = {enabled = false},
+                  mccabe = {enabled = false},
+                  preload = {enabled = false},
+                  rope_completion = {enabled = false}
                 }
-              },
-              capabilities = capabilities
-
-              -- settings = {
-              --   pylsp = {
-              --     plugins = {
-              --       -- formatter options
-              --       black = { enabled = false },
-              --       autopep8 = { enabled = false },
-              --       yapf = { enabled = false },
-              --       -- linter options
-              --       pylint = { enabled = true, executable = "pylint" },
-              --       pyflakes = { enabled = false },
-              --       pycodestyle = { enabled = false },
-              --       -- type checker
-              --       pylsp_mypy = { enabled = true },
-              --       -- auto-completion options
-              --       -- jedi_completion = { fuzzy = true },
-              --       rope_autoimport = { enabled = true },
-              --       rope_completion = { enabled = true },
-              --       -- import sorting
-              --       pyls_isort = { enabled = false },
-              --     },
-              --   },
-              -- },
-            })
-          end,
-          lua_ls = function()
-            require('lspconfig').lua_ls.setup({
-              settings = {
-                Lua = {
-                  runtime = { version = 'LuaJIT' },
-                  workspace = {
-                    checkThirdParty = false,
-                    -- Tells lua_ls where to find all the Lua files that you have loaded
-                    -- for your neovim configuration.
-                    -- library = {
-                    --   '${3rd}/luv/library',
-                    --   unpack(vim.api.nvim_get_runtime_file('', true)),
-                    -- },
-                    -- If lua_ls is really slow on your computer, you can try this instead:
-                    library = { vim.env.VIMRUNTIME },
-                  },
-                  completion = {
-                    callSnippet = 'Replace',
-                  },
-                  -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-                  -- diagnostics = { disable = { 'missing-fields' } },
-                },
               }
-            })
-          end,
-          -- cette première fonction est le "gestionnaire par défaut"
-          -- elle s'applique à chaque serveur linguistique sans "gestionnaire personnalisé"
-          function(server_name)
-            require("lspconfig")[server_name].setup({ capabilities = capabilities })
-          end,
-        },
-      }
-    )
+            },
+          }
+        end,
+
+        lua_ls = function()
+          require('lspconfig').lua_ls.setup({
+            settings = {
+              Lua = {
+                runtime = { version = 'LuaJIT' },
+                workspace = {
+                  checkThirdParty = false,
+                  -- Tells lua_ls where to find all the Lua files that you have loaded
+                  -- for your neovim configuration.
+                  -- library = {
+                  --   '${3rd}/luv/library',
+                  --   unpack(vim.api.nvim_get_runtime_file('', true)),
+                  -- },
+                  -- If lua_ls is really slow on your computer, you can try this instead:
+                  library = { vim.env.VIMRUNTIME },
+                },
+                completion = {
+                  callSnippet = 'Replace',
+                },
+                -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+                -- diagnostics = { disable = { 'missing-fields' } },
+              },
+            }
+          })
+        end,
+        -- this first function is the "default handler"
+        -- it applies to every language server without a "custom handler"
+        function(server_name)
+          require("lspconfig")[server_name].setup({ capabilities = capabilities })
+        end,
+      },
+    }
   end,
+
+  -- config = function()
+  --
+  --
+  --
+  -- add_keymaps()
+  --
+  -- local capabilities = require("blink.cmp").get_lsp_capabilities()
+  -- require("mason").setup()
+  -- require("mason-lspconfig").setup(
+  --   {
+  --     ensure_installed = {"clangd", "pylsp", "lua_ls"},
+  --     automatic_installation = true,
+  --     handlers = {
+  --       pylsp = function()
+  --         require('lspconfig').pylsp.setup({
+  --           capabilities = capabilities,
+  --           -- See https://waylonwalker.com/setup-pylsp/
+  --           settings = {
+  --             pylsp = {
+  --               configurationSources = {"flake8"},
+  --               plugins = {
+  --                 jedi_completion = {enabled = true},
+  --                 jedi_hover = {enabled = true},
+  --                 jedi_references = {enabled = true},
+  --                 jedi_signature_help = {enabled = true},
+  --                 jedi_symbols = {enabled = true, all_scopes = true},
+  --                 pycodestyle = {enabled = false},
+  --                 flake8 = {
+  --                   enabled = true,
+  --                   ignore = {},
+  --                   maxLineLength = 160
+  --                 },
+  --                 mypy = {enabled = true},
+  --                 isort = {enabled = false},
+  --                 yapf = {enabled = false},
+  --                 pylint = {enabled = false},
+  --                 pydocstyle = {enabled = false},
+  --                 mccabe = {enabled = false},
+  --                 preload = {enabled = false},
+  --                 rope_completion = {enabled = false}
+  --               }
+  --             }
+  --           },
+  --
+  --           -- settings = {
+  --           --   pylsp = {
+  --           --     plugins = {
+  --           --       -- formatter options
+  --           --       black = { enabled = false },
+  --           --       autopep8 = { enabled = false },
+  --           --       yapf = { enabled = false },
+  --           --       -- linter options
+  --           --       pylint = { enabled = true, executable = "pylint" },
+  --           --       pyflakes = { enabled = false },
+  --           --       pycodestyle = { enabled = false },
+  --           --       -- type checker
+  --           --       pylsp_mypy = { enabled = true },
+  --           --       -- auto-completion options
+  --           --       -- jedi_completion = { fuzzy = true },
+  --           --       rope_autoimport = { enabled = true },
+  --           --       rope_completion = { enabled = true },
+  --           --       -- import sorting
+  --           --       pyls_isort = { enabled = false },
+  --           --     },
+  --           --   },
+  --           -- },
+  --         })
+  --       end,
+  --       -- cette première fonction est le "gestionnaire par défaut"
+  --       -- elle s'applique à chaque serveur linguistique sans "gestionnaire personnalisé"
+  --       function(server_name)
+  --         require("lspconfig")[server_name].setup({ capabilities = capabilities })
+  --       end,
+  --     },
+  --   }
+  -- )
+  -- end,
 }
