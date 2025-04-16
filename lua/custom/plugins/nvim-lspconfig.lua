@@ -9,6 +9,7 @@ return {
 
   opts = function()
     require('mason').setup()
+    local lspconfig = require('lspconfig')
     local capabilities = require("blink.cmp").get_lsp_capabilities()
 
     vim.diagnostic.config({
@@ -119,42 +120,21 @@ return {
     add_keymaps()
 
     return {
-      ensure_installed = {"clangd", "pylsp", "lua_ls"},
+      ensure_installed = {"clangd", "basedpyright", "lua_ls"},
       automatic_installation = false,
       handlers = {
-        pylsp = function()
-          require("lspconfig")['pylsp'].setup{
+        basedpyright = function()
+          lspconfig.basedpyright.setup({
             capabilities = capabilities,
-            -- See https://waylonwalker.com/setup-pylsp/
             settings = {
-              pylsp = {
-                configurationSources = {"flake8"},
-                plugins = {
-                  jedi_completion = {enabled = true},
-                  jedi_hover = {enabled = true},
-                  jedi_references = {enabled = true},
-                  jedi_signature_help = {enabled = true},
-                  jedi_symbols = {enabled = true, all_scopes = true},
-                  pycodestyle = {enabled = false},
-                  flake8 = {
-                    enabled = true,
-                    ignore = {},
-                    maxLineLength = 160
-                  },
-                  mypy = {enabled = true},
-                  isort = {enabled = false},
-                  yapf = {enabled = false},
-                  pylint = {enabled = false},
-                  pydocstyle = {enabled = false},
-                  mccabe = {enabled = false},
-                  preload = {enabled = false},
-                  rope_completion = {enabled = false}
+              basedpyright = {
+                analysis = {
+                  autoSearchPaths = false,
                 }
               }
-            },
-          }
+            }
+          })
         end,
-
         lua_ls = function()
           require('lspconfig').lua_ls.setup({
             settings = {
