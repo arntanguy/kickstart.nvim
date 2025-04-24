@@ -2,10 +2,19 @@
 return {
   'saghen/blink.cmp',
   -- optional: provides snippets for the snippet source
-  dependencies = { 
+  dependencies = {
     'rafamadriz/friendly-snippets',
     'arntanguy/mc-rtc-snippets',
-    'xzbdmw/colorful-menu.nvim'
+    'xzbdmw/colorful-menu.nvim',
+    -- add blink.compat to dependencies to allow using nvim-cmp completion sources
+    { "saghen/blink.compat", opts = { enable_events = true } },
+      {
+        "Exafunction/codeium.nvim",
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+        },
+        opts = {},
+      },
   },
 
   -- use a release tag to download pre-built binaries
@@ -66,8 +75,16 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'buffer' },
+      default = { 'lsp', 'path', 'snippets', 'buffer', 'codeium' },
+      providers = {
+            codeium = {
+              name = "codeium",
+              module = "blink.compat.source",
+              score_offset = 3,
+            },
+      },
     },
+
 
     -- (Default) Rust fuzzy matcher for typo resistance and significantly better performance
     -- You may use a lua implementation instead by using `implementation = "lua"` or fallback to the lua implementation,
