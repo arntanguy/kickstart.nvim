@@ -1,0 +1,38 @@
+-- Tabby plugin
+-- Local LLM code completion with LSP
+-- See https://www.tabbyml.com
+--
+-- Setup:
+-- $ docker run -d \                                                                                                                                                                      
+--   --name tabby \
+--   --gpus all \
+--   -p 8080:8080 \
+--   -v $HOME/.tabby:/data \
+--   registry.tabbyml.com/tabbyml/tabby \
+--     serve \
+--     --model StarCoder-1B \
+--     --chat-model Qwen2-1.5B-Instruct \
+--     --device cuda
+--
+--  Install tabby client
+-- $ npm install -g tabby-agent
+--
+-- Configure which server to use
+-- ~/.tabby-client/agent/config.toml
+-- [server]
+-- endpoint = "http://localhost:8080"
+-- token = "your-auth-token"
+--
+-- Visit http://localhost:8080/tabby/
+
+return {
+  "TabbyML/vim-tabby",
+  lazy = false,
+  dependencies = {
+    "neovim/nvim-lspconfig",
+  },
+  init = function()
+    vim.g.tabby_agent_start_command = {"npx", "tabby-agent", "--stdio"}
+    vim.g.tabby_inline_completion_trigger = "auto"
+  end,
+}

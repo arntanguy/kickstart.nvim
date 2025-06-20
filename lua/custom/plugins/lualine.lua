@@ -309,6 +309,7 @@ return {
             options = {
                 globalstatus = true,
                 -- theme = 'tokyonight'
+                theme = 'catppuccin'
             }
         }
 
