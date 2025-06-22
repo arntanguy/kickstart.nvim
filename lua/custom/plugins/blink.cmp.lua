@@ -6,6 +6,7 @@ return {
     'rafamadriz/friendly-snippets',
     'arntanguy/mc-rtc-snippets',
     'xzbdmw/colorful-menu.nvim',
+    "giuxtaposition/blink-cmp-copilot",
     -- add blink.compat to dependencies to allow using nvim-cmp completion sources
     { "saghen/blink.compat", opts = { enable_events = true } },
       {
@@ -50,7 +51,10 @@ return {
     -- (Default) Only show the documentation popup when manually triggered
     completion = {
       documentation = { auto_show = false },
+      ghost_text = { enabled = true, show_with_menu = true },
       menu = {
+        direction_priority = { 'n' }, -- force menu to open upwards
+        -- auto_show = false,
         draw = {
           -- We don't need label_description now because label and label_description are already
           -- combined together in label by colorful-menu.nvim.
@@ -75,12 +79,19 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'buffer', 'codeium' },
+      -- default = { 'lsp', 'path', 'snippets', 'buffer', 'codeium' },
+      default = { 'lsp','copilot', 'path', 'snippets', 'buffer', 'codeium' },
       providers = {
             codeium = {
               name = "codeium",
               module = "blink.compat.source",
               score_offset = 3,
+            },
+            copilot = {
+              name = "copilot",
+              module = "blink-cmp-copilot",
+              score_offset = 100,
+              async = true,
             },
       },
     },
