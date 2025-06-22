@@ -9,13 +9,13 @@ return {
     "giuxtaposition/blink-cmp-copilot",
     -- add blink.compat to dependencies to allow using nvim-cmp completion sources
     { "saghen/blink.compat", opts = { enable_events = true } },
-      {
-        "Exafunction/codeium.nvim",
-        dependencies = {
-          "nvim-lua/plenary.nvim",
-        },
-        opts = {},
-      },
+      -- {
+      --   "Exafunction/codeium.nvim",
+      --   dependencies = {
+      --     "nvim-lua/plenary.nvim",
+      --   },
+      --   opts = {},
+      -- },
   },
 
   -- use a release tag to download pre-built binaries
@@ -80,13 +80,13 @@ return {
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
       -- default = { 'lsp', 'path', 'snippets', 'buffer', 'codeium' },
-      default = { 'lsp','copilot', 'path', 'snippets', 'buffer', 'codeium' },
+      default = { 'lsp','copilot', 'path', 'snippets', 'buffer' },
       providers = {
-            codeium = {
-              name = "codeium",
-              module = "blink.compat.source",
-              score_offset = 3,
-            },
+            -- codeium = {
+            --   name = "codeium",
+            --   module = "blink.compat.source",
+            --   score_offset = 3,
+            -- },
             copilot = {
               name = "copilot",
               module = "blink-cmp-copilot",
