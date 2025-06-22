@@ -1,0 +1,32 @@
+{
+  "name": "test-neovim-config",
+
+  "build":
+  {
+    "dockerfile": "./Dockerfile",
+    "context": "."
+  },
+
+  "mounts": [
+    "type=bind,source=/tmp/.X11-unix,target=/tmp/.X11-unix,consistency=cached",
+    "source=/tmp,target=/tmp/shared,type=bind"
+  ],
+
+   "features":
+  {
+    "ghcr.io/duduribeiro/devcontainer-features/neovim:1.0.1": {}
+  },
+
+  "runArgs": [
+    "--network=host"
+  ],
+
+  "containerEnv": {
+    "DISPLAY": "${localEnv:DISPLAY}",
+    "TERM": "xterm-256color"
+  },
+
+  "remoteUser": "vscode",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/home/vscode/.config/nvim,type=bind",
+  "workspaceFolder": "/home/vscode/.config/nvim"
+}
