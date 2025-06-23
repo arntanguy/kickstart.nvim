@@ -6,9 +6,10 @@ return {
     'rafamadriz/friendly-snippets',
     'arntanguy/mc-rtc-snippets',
     'xzbdmw/colorful-menu.nvim',
-    "giuxtaposition/blink-cmp-copilot",
-    -- add blink.compat to dependencies to allow using nvim-cmp completion sources
-    { "saghen/blink.compat", opts = { enable_events = true } },
+    'fang2hou/blink-copilot'
+    -- "giuxtaposition/blink-cmp-copilot",
+    -- -- add blink.compat to dependencies to allow using nvim-cmp completion sources
+    -- { "saghen/blink.compat", opts = { enable_events = true } },
       -- {
       --   "Exafunction/codeium.nvim",
       --   dependencies = {
@@ -80,19 +81,20 @@ return {
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
       -- default = { 'lsp', 'path', 'snippets', 'buffer', 'codeium' },
-      default = { 'lsp','copilot', 'path', 'snippets', 'buffer' },
+      default = { 'lsp', 'snippets', 'copilot', 'path', 'buffer' },
       providers = {
-            -- codeium = {
-            --   name = "codeium",
-            --   module = "blink.compat.source",
-            --   score_offset = 3,
-            -- },
-            copilot = {
-              name = "copilot",
-              module = "blink-cmp-copilot",
-              score_offset = 100,
-              async = true,
-            },
+        -- codeium = {
+        --   name = "codeium",
+        --   module = "blink.compat.source",
+        --   score_offset = 3,
+        -- },
+        copilot = {
+          name = "copilot",
+          module = "blink-copilot",
+          max_completions = 3,
+          score_offset = 100,
+          async = true,
+        },
       },
     },
 
